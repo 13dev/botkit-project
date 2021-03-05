@@ -3,6 +3,7 @@ const os = require('os');
 const scopes = require('../utils/scopes');
 const {formatUptime} = require('../utils/helpers');
 const keywords = require('../utils/keywords');
+const helpers = require('../utils/helpers');
 
 const controller = botkit.slackbot({
     debug: true,
@@ -11,6 +12,17 @@ const controller = botkit.slackbot({
 controller.spawn({
     token: process.env.TOKEN
 }).startRTM();
+
+controller.middleware.receive.use((bot, message, next) => {
+
+    if(message.type === 'direct_message') {
+        if(message.text !== undefined) {
+            message.text = helpers.clearString(message.text);
+        }
+    }
+
+    next();
+});
 
 
 controller.hears(keywords.GREETINGS, scopes, (bot, message) => {
@@ -23,17 +35,17 @@ controller.hears(keywords.GREETINGS, scopes, (bot, message) => {
     // react to sended message
     bot.api.reactions.add(options, err => {
         if (err) {
-            bot.botkit.log('Cant add emoji reaction.', err);
+            bot.botkit.log('Impossivel adicionar uma reacção.', err);
         }
     });
 
     controller.storage.users.get(message.user, (err, user) => {
         if (user && user.name) {
-            bot.reply(message, `Hello ${user.name}!`);
+            bot.reply(message, `Olá ${user.name}!`);
             return;
         }
 
-        bot.reply(message, 'Hello.');
+        bot.reply(message, 'Olá.');
     });
 });
 
@@ -50,7 +62,7 @@ controller.hears(keywords.SET_USER_NAME, scopes, function (bot, message) {
         user.name = name;
 
         controller.storage.users.save(user, () => {
-            bot.reply(message, `Got it. I will call you ${user.name} from now on.`);
+            bot.reply(message, `Percebi. Vou chamá-lo de ${user.name} a partir de agora.`);
         });
     });
 });
@@ -59,22 +71,22 @@ controller.hears(keywords.WHATS_USER_NAME, scopes, function (bot, message) {
 
     controller.storage.users.get(message.user, (err, user) => {
         if (user && user.name) {
-            bot.reply(message, `Your name is ${user.name}`);
+            bot.reply(message, `O seu nome é ${user.name}`);
             return;
         }
 
         bot.startConversation(message, (err, convo) => {
             if (err) {
-                bot.botkit.log('Cant start a conversation.', err);
+                bot.botkit.log('Impossivel começar uma conversa.', err);
                 return;
             }
 
-            convo.say('I do not know your name yet!');
-            convo.ask('What should I call you?', (response, convo) => {
+            convo.say('Ainda não sei o seu nome!');
+            convo.ask('Qual o seu nome/apelido?', (response, convo) => {
 
-                convo.ask(`You want me to call you ${response.text} ?`, [
+                convo.ask(`Queres que te chame de ${response.text} ?`, [
                     {
-                        pattern: 'yes',
+                        pattern: 'sim',
                         callback: (response, convo) => {
                             // since no further messages are queued after this,
                             // the conversation will end naturally with status == 'completed'
@@ -82,7 +94,7 @@ controller.hears(keywords.WHATS_USER_NAME, scopes, function (bot, message) {
                         }
                     },
                     {
-                        pattern: 'no',
+                        pattern: 'não',
                         callback: (response, convo) => convo.stop(),
                     },
                     {
@@ -100,7 +112,7 @@ controller.hears(keywords.WHATS_USER_NAME, scopes, function (bot, message) {
 
             convo.on('end', (convo) => {
                 if (convo.status === 'completed') {
-                    bot.reply(message, 'OK! I will update my dossier...');
+                    bot.reply(message, 'OK! Vou atualizar o meu dossiê...');
 
                     controller.storage.users.get(message.user, (err, user) => {
                         if (!user) {
@@ -111,7 +123,7 @@ controller.hears(keywords.WHATS_USER_NAME, scopes, function (bot, message) {
 
                         user.name = convo.extractResponse('nickname');
                         controller.storage.users.save(user, () => {
-                            bot.reply(message, `I will call you ${user.name} from now on.`);
+                            bot.reply(message, `Vou chamá-lo de ${user.name} a partir de agora.`);
                         });
                     });
 
@@ -132,11 +144,11 @@ controller.hears(keywords.SHUTDOWN, scopes, (bot, message) => {
 
     bot.startConversation(message, (err, convo) => {
 
-        convo.ask('Are you sure you want me to shutdown?', [
+        convo.ask('Tem certeza que quer que eu desligue?', [
             {
                 pattern: bot.utterances.yes,
                 callback: (response, convo) => {
-                    convo.say('Bye!');
+                    convo.say('Adeus!');
                     convo.next();
                     setTimeout(() => {
                         process.exit();
@@ -147,7 +159,7 @@ controller.hears(keywords.SHUTDOWN, scopes, (bot, message) => {
                 pattern: bot.utterances.no,
                 default: true,
                 callback: (response, convo) => {
-                    convo.say('*Phew!*');
+                    convo.say('*hummm!*');
                     convo.next();
                 }
             }
@@ -160,7 +172,7 @@ controller.hears(keywords.IDENTIFY_ME, scopes, (bot, message) => {
     const hostname = os.hostname();
     const uptime = formatUptime(process.uptime());
 
-    bot.reply(message, `:robot_face: I am a bot named <@${bot.identity.name}>. I have been running for ${uptime} on ${hostname}.`);
+    bot.reply(message, `:robot_face: Sou um bot chamado <@${bot.identity.name}>. Estou ativo por ${uptime} em ${hostname}.`);
 });
 
 module.exports = controller;

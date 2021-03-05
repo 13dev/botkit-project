@@ -1,7 +1,7 @@
 module.exports = {
-    IDENTIFY_ME: ['uptime', 'identify yourself', 'who are you', 'what is your name'],
-    SHUTDOWN: ['shutdown'],
-    WHATS_USER_NAME: ['what is my name', 'who am i'],
-    SET_USER_NAME: ['call me (.*)', 'my name is (.*)'],
-    GREETINGS: ['hello', 'hi'],
+    IDENTIFY_ME: ['tempo de atividade',  'quem es tu', 'qual e o teu nome', 'quem es'],
+    SHUTDOWN: ['desligar'],
+    WHATS_USER_NAME: ['qual e o meu nome', 'quem sou eu'],
+    SET_USER_NAME: ['chama me (.*)', 'o meu nome é (.*)'],
+    GREETINGS: ['ola', 'boas'],
 };
