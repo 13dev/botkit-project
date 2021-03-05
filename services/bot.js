@@ -59,7 +59,7 @@ controller.hears(keywords.WHATS_USER_NAME, scopes, function (bot, message) {
 
     controller.storage.users.get(message.user, (err, user) => {
         if (user && user.name) {
-            bot.reply(message, 'Your name is ' + user.name);
+            bot.reply(message, `Your name is ${user.name}`);
             return;
         }
 
