@@ -94,7 +94,7 @@ controller.hears(keywords.WHATS_USER_NAME, scopes, function (bot, message) {
                         }
                     },
                     {
-                        pattern: 'não',
+                        pattern: 'nao',
                         callback: (response, convo) => convo.stop(),
                     },
                     {
