@@ -2,19 +2,18 @@ module.exports = {
     formatUptime: function (uptime) {
         let unit = 'segundo';
         if (uptime > 60) {
-            uptime = uptime / 60;
+            uptime /= 60;
             unit = 'minuto';
         }
         if (uptime > 60) {
-            uptime = uptime / 60;
+            uptime /= 60;
             unit = 'hora';
         }
         if (uptime !== 1) {
-            unit = unit + 's';
+            unit += 's';
         }
 
-        uptime = uptime + ' ' + unit;
-        return uptime;
+        return parseInt(uptime) + ' ' + unit;
     },
 
     clearString: function (input) {
