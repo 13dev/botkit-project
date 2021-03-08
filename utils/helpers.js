@@ -13,7 +13,7 @@ module.exports = {
             unit = unit + 's';
         }
 
-        uptime = uptime + ' ' + unit;
+        uptime = parseInt(uptime) + ' ' + unit;
         return uptime;
     },
 
