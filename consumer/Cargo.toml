@@ -10,10 +10,11 @@ crate-type = ["cdylib"]
 
 [dependencies]
 wasm-bindgen = "=0.2.61"
+hyper = { version = "0.14", features = ["full"] }
+#curl = "0.4.35"
 
 [package.metadata.wasm-bindgen.profile.release]
 wasm-opt = ["-Oz", "--enable-mutable-globals"]
-
 
 [package.metadata.wasm-bindgen.profile.dev]
 wasm-opt = ["-Oz", "--enable-mutable-globals"]
