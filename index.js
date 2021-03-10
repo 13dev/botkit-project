@@ -5,7 +5,7 @@ if (!process.env.TOKEN) {
     process.exit(1);
 }
 const { say } = require('./consumer/pkg/consumer.js');
-say("Michael");
+console.log(say("Michael"));
 
 require('./services/bot');
 
