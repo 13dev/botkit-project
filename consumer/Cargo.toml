@@ -1,0 +1,31 @@
+[package]
+name = "consumer"
+version = "0.1.0"
+authors = ["Leo Oliveira <qwerty124563@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+wasm-bindgen = "=0.2.61"
+
+[package.metadata.wasm-bindgen.profile.release]
+wasm-opt = ["-Oz", "--enable-mutable-globals"]
+
+
+[package.metadata.wasm-bindgen.profile.dev]
+wasm-opt = ["-Oz", "--enable-mutable-globals"]
+[package.metadata.wasm-bindgen.profile.profiling]
+wasm-opt = ["-Oz", "--enable-mutable-globals"]
+
+
+[package.metadata.wasm-pack.profile.profiling]
+wasm-opt = ["-Oz", "--enable-mutable-globals"]
+
+[package.metadata.wasm-pack.profile.dev]
+wasm-opt = false
+
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = false

@@ -7,6 +7,11 @@ const helpers = require('../utils/helpers');
 
 const controller = botkit.slackbot({
     debug: true,
+    scopes: [
+        'direct_message',
+        'direct_mention',
+        'mention',
+    ],
 });
 
 controller.spawn({
