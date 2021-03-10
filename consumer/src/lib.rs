@@ -1,20 +1,26 @@
+#[macro_use]
+extern crate dotenv_codegen;
+
 use wasm_bindgen::prelude::*;
 use hyper::{body::HttpBody as _, Client, Uri, Response, Body, Request, Method};
-use hyper::client::HttpConnector;
+use hyper::client::{HttpConnector, ResponseFuture};
 use std::error::Error;
 use std::result;
 use std::fmt::{Display, Formatter};
 use core::fmt;
 use std::borrow::Borrow;
+use std::ops::Deref;
+use std::str::FromStr;
 
 type Result<T> = result::Result<T, Box<dyn Error + Send + Sync>>;
 
-const API: &str = "https://ws01.inmadeira.com/qualidade/v5/gst/Expedita.WS.GesTools.Processes/processes.asmx/";
+const API: &str = "http://ws01.inmadeira.com/qualidade/v5/gst/Expedita.WS.GesTools.Processes/processes.asmx";
 
 #[derive(Debug)]
-enum Endpoint {
+pub enum Endpoint {
     RequestFilteredList,
 }
+
 impl fmt::Display for Endpoint {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         fmt::Debug::fmt(self, f)
@@ -26,7 +32,6 @@ struct Consumer {
 }
 
 
-
 impl Consumer {
     pub fn new() -> Self {
         let client = Client::new();
@@ -36,48 +41,52 @@ impl Consumer {
         }
     }
 
-    pub async fn get_request(&self) -> Response<Body> {
+    pub async fn get(&self) -> Response<Body> {
         self.client.get(Uri::from_static(API))
             .await
             .expect("Error making a request.")
     }
 
+    fn build_uri(endpoint: Endpoint) -> Uri {
+        Uri::from_str(
+            format!("{}/{}", API, endpoint).as_str()
+        ).unwrap()
+    }
 
-    // pub fn post_request(&self, request: Request<>) -> Response<Body> {
-    //     self.client.request()
-    //         .await
-    //         .expect("Error making a request.")
-    // }
+    pub fn post(&self, endpoint: Endpoint, body: Body) -> ResponseFuture {
+        let request = Request::builder()
+            .method(Method::POST)
+            .uri(Self::build_uri(endpoint))
+            .header("content-type", "application/json")
+            .body(body)
+            .unwrap();
+
+        self.client.request(request)
+    }
 }
 
-
-// pub fn build_uri<'a>(endpoint: &'a Endpoint) -> &'a Uri {
-//     let buf = &format!("{}", API);
-//     &Uri::from_static(buf.as_ref())
-// }
-
-pub fn main() -> Result<Body> {
+pub fn main() {
 
     //println!("{}", build_uri(&Endpoint::RequestFilteredList));
 
     //let consumer= Consumer::new();
 
-    let req = Request::builder()
-        .method(Method::POST)
-        .uri(format!("{}/{}", API, Endpoint::RequestFilteredList))
-        .header("content-type", "application/json")
-        .body(Body::from(r#"{
-            "filter": 1,
-            "code": "",
-            "jtStartIndex": 0,
-            "jtPageSize": 10,
-            "jtSorting": "__int__ID DESC",
-            "token": ""
-            }
-            "#)
-        )?;
+    // let req = Request::builder()
+    //     .method(Method::POST)
+    //     .uri(format!("{}/{}", API, Endpoint::RequestFilteredList))
+    //     .header("content-type", "application/json")
+    //     .body(Body::from(r#"{
+    //         "filter": 1,
+    //         "code": "",
+    //         "jtStartIndex": 0,
+    //         "jtPageSize": 10,
+    //         "jtSorting": "__int__ID DESC",
+    //         "token": ""
+    //         }
+    //         "#)
+    //     )?;
 
-    Ok(req)
+    // Ok(req)
 
 //     let client = Client::new();
 //
@@ -96,19 +105,34 @@ pub fn main() -> Result<Body> {
 
 #[wasm_bindgen]
 pub fn say(s: String) -> String {
-
     let r = String::from("hello ");
     return r + &s;
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::{Endpoint, main};
+    use crate::{Consumer, Endpoint};
+    use hyper::Body;
+    use dotenv::dotenv;
 
-    #[test]
-     fn check_authentication_response() {
-        let response = main().unwrap();
-        println!("{:?}", response);
+
+    #[tokio::test]
+    async fn check_authentication_response() {
+        println!("{}",dotenv!("TOKEN"));
+        let post = Consumer::new();
+        let response = post.post(
+            Endpoint::RequestFilteredList,
+            Body::from(r#"{
+                  "filter": 1,
+                  "code": "",
+                  "jtStartIndex": 0,
+                  "jtPageSize": 10,
+                  "jtSorting": "__int__ID DESC",
+                  "token": "{token}"
+                  }"#),
+        );
+
+        println!("{:?}", response.await.unwrap());
         assert_eq!(2 + 2, 4);
     }
 }
