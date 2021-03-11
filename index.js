@@ -13,16 +13,16 @@ if (!process.env.TOKEN) {
     process.exit(1);
 }
 
-consumer.requestFilterList({
-    filter: 1,
-    code: "",
-    jtStartIndex: 0,
-    jtPageSize: 10,
-    jtSorting: helpers.buildSorting('ID', 'int'),
-    token: process.env.API_TOKEN
-});
+// consumer.requestFilterList({
+//     filter: 1,
+//     code: "",
+//     jtStartIndex: 0,
+//     jtPageSize: 10,
+//     jtSorting: helpers.buildSorting('ID', 'int'),
+//     token: process.env.API_TOKEN
+// });
 
-//require('./services/bot');
+require('./services/bot');
 
 
 

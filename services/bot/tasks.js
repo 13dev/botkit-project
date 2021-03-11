@@ -1,4 +1,9 @@
 module.exports = {
+    /***
+     * @param bot
+     * @param message
+     * @constructor
+     */
     GET_TASKS: (bot, message) => {
         let numberTasks = parseInt(message.match[1]);
 
