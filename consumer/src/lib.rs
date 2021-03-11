@@ -1,5 +1,6 @@
 mod consumer;
 mod endpoints;
+mod objects;
 
 #[macro_use]
 extern crate dotenv_codegen;
@@ -41,26 +42,7 @@ pub fn main() {
     //     )?;
 }
 
-#[derive(Serialize, Deserialize, Debug)]
-#[serde(tag = "type")]
-struct RequestFilterListBody<'a> {
-    #[serde(rename = "filter")]
-    filter: i8,
 
-    #[serde(rename = "code")]
-    code: String,
-
-    #[serde(rename = "jtStartIndex")]
-    start_index: i16,
-
-    #[serde(rename = "jtPageSize")]
-    page_size: i16,
-
-    #[serde(rename = "jtSorting")]
-    sorting: String,
-
-    pub token: &'a str,
-}
 
 #[wasm_bindgen]
 pub fn say(s: String) -> String {
@@ -70,10 +52,10 @@ pub fn say(s: String) -> String {
 
 #[cfg(test)]
 mod tests {
-    use hyper::Body;
+    use hyper::{Body, body};
     use dotenv::dotenv;
     use crate::endpoints::Endpoint;
-    use crate::RequestFilterListBody;
+    use crate::ResponseFilterListBody;
     use crate::consumer::Consumer;
     use hyper::body::Bytes;
     use serde::Serialize;
@@ -81,7 +63,7 @@ mod tests {
 
     #[tokio::test]
     async fn check_filtered_list() {
-        let params = &RequestFilterListBody {
+        let params = &ResponseFilterListBody {
             filter: 0,
             code: String::new(),
             start_index: 0,
@@ -90,29 +72,22 @@ mod tests {
             token: dotenv!("TOKEN"),
         };
 
-        let response = Consumer::new().post(
+        let consumer = Consumer::new();
+
+        let mut response = consumer.post(
             Endpoint::RequestFilteredList,
             Body::from(serde_json::to_string(params).unwrap()),
-        );
-        let mut body = response.await.unwrap().into_body();
+        ).await.expect("Cant get Response.");
 
-        //let resp: Bytes = hyper::body::to_bytes(body).await.unwrap();
+        let body = body::to_bytes(response.body_mut())
+            .await
+            .expect("Cant convert response to bytes.")
+            .to_vec();
 
-        // let resp = Bytes::from(r#"{
-        //      "filter": 1,
-        //      "code": "",
-        //      "jtStartIndex": 0,
-        //      "jtPageSize": 10,
-        //      "jtSorting": "__int__ID DESC",
-        //      "token": "fsdfsd"
-        //      }
-        //      "#).to_vec();
-
-
-        let mut content = String::from_utf8(resp)
+        let mut content = String::from_utf8(body)
             .expect("Error convert bytes to string");
 
-        let data =  serde_json::from_str::<RequestFilterListBody>(&content.as_str())
+        let data =  serde_json::from_str::<ResponseFilterListBody>(&content.as_str())
             .expect("Cant Deserialize the content.");
 
         println!("{:?}",data.token);
