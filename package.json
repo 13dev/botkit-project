@@ -13,6 +13,7 @@
     "botkit": "^0.7"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "dotenv": "^8.2.0"
   }
 }
