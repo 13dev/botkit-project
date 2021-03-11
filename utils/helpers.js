@@ -27,5 +27,9 @@ module.exports = {
             }
         })
         return input.join('').toLowerCase();
+    },
+
+    buildSorting: function (key, type = 'int', order = 'DESC') {
+        return `__${type.toLowerCase()}__${key} ${order.toUpperCase()}`
     }
 };

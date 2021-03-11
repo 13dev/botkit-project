@@ -1,6 +1,7 @@
 require('dotenv').config();
 const axios = require('axios');
 const consumer = require('./services/consumer');
+const helpers = require('./utils/helpers');
 
 axios.defaults.baseURL = process.env.API_URL;
 axios.defaults.headers.post['Content-Type'] = 'application/json';
@@ -15,7 +16,7 @@ consumer.requestFilterList({
     code: "",
     jtStartIndex: 0,
     jtPageSize: 10,
-    jtSorting: "__int__ID DESC",
+    jtSorting: helpers.buildSorting('ID', 'int'),
     token: process.env.API_TOKEN
 });
 
