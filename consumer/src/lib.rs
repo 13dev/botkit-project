@@ -83,10 +83,10 @@ mod tests {
     async fn check_filtered_list() {
         let params = &RequestFilterListBody {
             filter: 0,
-            code: "".to_string(),
+            code: String::new(),
             start_index: 0,
             page_size: 10,
-            sorting: "__int__ID DESC".to_string(),
+            sorting: String::from("__int__ID DESC"),
             token: dotenv!("TOKEN"),
         };
 
