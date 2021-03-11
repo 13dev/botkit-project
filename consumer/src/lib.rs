@@ -15,9 +15,17 @@ use core::fmt;
 use std::borrow::Borrow;
 use std::ops::Deref;
 use std::str::FromStr;
-use serde::Serialize;
-use serde::Deserialize;
 use std::str;
+use crate::objects::ResponseFilterListBody;
+use crate::consumer::Consumer;
+use crate::endpoints::Endpoint;
+
+use hyper::{body};
+use dotenv::dotenv;
+
+use hyper::body::{Bytes, Buf};
+use serde::Serialize;
+use tokio::task::spawn_local;
 
 
 pub fn main() {
@@ -45,9 +53,50 @@ pub fn main() {
 
 
 #[wasm_bindgen]
-pub fn say(s: String) -> String {
-    let r = String::from("hello ");
-    return r + &s;
+pub fn post_filter_list() -> String {
+    // let params = ResponseFilterListBody {
+    //     filter: 0,
+    //     code: String::new(),
+    //     start_index: 0,
+    //     page_size: 10,
+    //     sorting: String::from("__int__ID DESC"),
+    //     token: String::from(dotenv!("TOKEN")),
+    // };
+    //
+    // let consumer = Consumer::new();
+    //
+    // spawn_local(async move {
+    //     let mut response = consumer
+    //         .post(Endpoint::RequestFilteredList, Body::from(serde_json::to_string( &ResponseFilterListBody {
+    //             filter: 0,
+    //             code: String::new(),
+    //             start_index: 0,
+    //             page_size: 10,
+    //             sorting: String::from("__int__ID DESC"),
+    //             token: String::from(dotenv!("TOKEN")),
+    //         }).unwrap()))
+    //         .await
+    //         .expect("Cant get Response.");
+    //
+    //     let mut body = body::to_bytes(response.body_mut())
+    //         .await
+    //         .expect("Cant convert response to bytes.")
+    //         .reader();
+    // });
+
+
+
+    // let data: ResponseFilterListBody = serde_json::from_reader(body)
+    //     .expect("Cant Deserialize the content.");
+
+    serde_json::to_string( &ResponseFilterListBody {
+        filter: 0,
+        code: String::new(),
+        start_index: 0,
+        page_size: 10,
+        sorting: String::from("__int__ID DESC"),
+        token: String::from(dotenv!("TOKEN")),
+    }).unwrap()
 }
 
 #[cfg(test)]
@@ -55,10 +104,10 @@ mod tests {
     use hyper::{Body, body};
     use dotenv::dotenv;
     use crate::endpoints::Endpoint;
-    use crate::ResponseFilterListBody;
     use crate::consumer::Consumer;
-    use hyper::body::Bytes;
+    use hyper::body::{Bytes, Buf};
     use serde::Serialize;
+    use crate::objects::ResponseFilterListBody;
 
 
     #[tokio::test]
@@ -69,25 +118,22 @@ mod tests {
             start_index: 0,
             page_size: 10,
             sorting: String::from("__int__ID DESC"),
-            token: dotenv!("TOKEN"),
+            token: String::from(dotenv!("TOKEN")),
         };
 
         let consumer = Consumer::new();
 
-        let mut response = consumer.post(
-            Endpoint::RequestFilteredList,
-            Body::from(serde_json::to_string(params).unwrap()),
-        ).await.expect("Cant get Response.");
+        let mut response = consumer
+            .post(Endpoint::RequestFilteredList, Body::from(serde_json::to_string(params).unwrap()))
+            .await
+            .expect("Cant get Response.");
 
-        let body = body::to_bytes(response.body_mut())
+        let mut body = body::to_bytes(response.body_mut())
             .await
             .expect("Cant convert response to bytes.")
-            .to_vec();
+            .reader();
 
-        let mut content = String::from_utf8(body)
-            .expect("Error convert bytes to string");
-
-        let data =  serde_json::from_str::<ResponseFilterListBody>(&content.as_str())
+        let data: ResponseFilterListBody = serde_json::from_reader(body)
             .expect("Cant Deserialize the content.");
 
         println!("{:?}",data.token);
