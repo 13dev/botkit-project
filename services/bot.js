@@ -4,6 +4,7 @@ const scopes = require('../utils/scopes');
 const {formatUptime} = require('../utils/helpers');
 const keywords = require('../utils/keywords');
 const helpers = require('../utils/helpers');
+const controllers = require('bot');
 
 const controller = botkit.slackbot({
     debug: true,
@@ -28,6 +29,11 @@ controller.middleware.receive.use((bot, message, next) => {
 
     next();
 });
+
+
+for (const [keyword, handler] of Object.entries(controllers)) {
+   controller.hears(keywords[keyword], scopes, handler);
+}
 
 
 controller.hears(keywords.GREETINGS, scopes, (bot, message) => {
@@ -179,5 +185,13 @@ controller.hears(keywords.IDENTIFY_ME, scopes, (bot, message) => {
 
     bot.reply(message, `:robot_face: Sou um bot chamado <@${bot.identity.name}>. Estou ativo por ${uptime} em ${hostname}.`);
 });
+
+controller.hears(keywords.GET_TASKS, scopes, (bot, message) => {
+
+
+
+})
+
+
 
 module.exports = controller;
