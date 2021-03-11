@@ -3,7 +3,6 @@ const consumer = require('./services/consumer');
 const helpers = require('./utils/helpers');
 
 require('dotenv').config();
-require('module-alias/register');
 
 axios.defaults.baseURL = process.env.API_URL;
 axios.defaults.headers.post['Content-Type'] = 'application/json';

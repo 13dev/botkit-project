@@ -1,3 +1,6 @@
+const controller = require('../instance');
+const {formatUptime} = require('../../../utils/helpers');
+
 module.exports = {
 
     GREETINGS: (bot, message) => {

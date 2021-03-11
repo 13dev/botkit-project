@@ -1,5 +1,6 @@
 
 module.exports = {
     ...require('./tasks'),
-    ...require('./greetings')
+    ...require('./greetings'),
+    ...require('./user'),
 };
