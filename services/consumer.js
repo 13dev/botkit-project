@@ -3,12 +3,11 @@ const axios = require('axios');
 
 module.exports = {
     requestFilterList: (data) => {
+        let result = [];
         axios.post('/RequestFilteredList', data)
-            .then((response) => {
-                console.log(response.data.d.Records)
-            })
-            .catch((error) => {
-                console.log(response.data.d.Records)
-            });
+            .then((response) => result = response.data.d.Records)
+            .catch((error) => result = error);
+
+        return result;
     },
 }
