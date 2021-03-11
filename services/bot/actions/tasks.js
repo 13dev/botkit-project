@@ -19,13 +19,18 @@ module.exports = {
         bot.reply(message, `Obtendo ${numberTasks} tarefas...`);
 
         console.log(data);
-        data.forEach(function (value) {
-            bot.reply(message, "``` " +
-                "ID: " + value.Id +
-                "Reference: " + value.Reference +
-                "Description" + value.Description +
-                "```");
-        })
+
+        axios.post('/RequestFilteredList', data)
+            .then(response => {
+                response.data.d.Records.forEach(function (value) {
+                    bot.reply(message, "``` " +
+                        "ID: " + value.Id +
+                        "Reference: " + value.Reference +
+                        "Description: " + value.Description +
+                        "```");
+                })
+            }).catch(console.log);
+
         bot.reply(message, `Obtendo ${numberTasks} tarefas...`);
     }
 };
