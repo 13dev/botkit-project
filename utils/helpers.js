@@ -31,5 +31,19 @@ module.exports = {
 
     buildSorting: function (key, type = 'int', order = 'DESC') {
         return `__${type.toLowerCase()}__${key} ${order.toUpperCase()}`
-    }
+    },
+
+    buildMessageTasks: function (response, params = []) {
+        let result = "```\n";
+        response.forEach(task => {
+            params.forEach(param => {
+                if(task[param] !== undefined) {
+                    result += `${param}: ${task[param]} \n`;
+                }
+            });
+            result += `-------------------------------------------- \n`;
+        })
+
+        return result + "```";
+    },
 };

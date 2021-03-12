@@ -4,5 +4,6 @@ module.exports = {
     WHATS_USER_NAME: ['qual e o meu nome', 'quem sou eu'],
     SET_USER_NAME: ['chama me (.*)', 'o meu nome e (.*)'],
     GREETINGS: ['ola', 'boas'],
-    GET_TASKS: ['get my first (.*) tasks']
+    GET_TASKS: ['get my first (.*) tasks'],
+    GET_TASKS_BY_TYPE: ['get my first (.*) tasks of type (.*)'],
 };
