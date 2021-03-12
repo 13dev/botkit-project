@@ -4,20 +4,15 @@ const axios = require('axios');
 
 
 let makeTaskRequest = (params = {})  => {
-
-    let data = {
-        ...{
-            filter: "1=1",
-            code: "",
-            jtStartIndex: 0,
-            jtPageSize: 10,
-            jtSorting: helpers.buildSorting('ID', 'int'),
-            token: process.env.API_TOKEN
-        },
+    return axios.post('/RequestFilteredList', {
+        filter: "1=1",
+        code: "",
+        jtStartIndex: 0,
+        jtPageSize: 10,
+        jtSorting: helpers.buildSorting('ID', 'int'),
+        token: process.env.API_TOKEN,
         ...params
-    };
-
-    return axios.post('/RequestFilteredList', data);
+    });
 };
 
 module.exports = {
