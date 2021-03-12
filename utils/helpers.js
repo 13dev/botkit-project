@@ -38,7 +38,7 @@ module.exports = {
         response.forEach(task => {
             result += `\n`;
             params.forEach(param => {
-                if(task[param] !== undefined) {
+                if(task[param]) {
                     let value = task[param]
                         .toString()
                         .replace(/\r?\n|\r/g, "\n> ");

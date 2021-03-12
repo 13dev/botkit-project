@@ -21,11 +21,18 @@ module.exports = {
         let numberTasks = parseInt(message.match[1]);
         let type = parseInt(message.match[2]);
 
-        bot.reply(message, `Obtendo *${numberTasks}* tarefas do tipo *${type}*...`);
+        bot.reply(message, `:gear: Obtendo *${numberTasks}* tarefas do tipo *${type}*...`);
 
 
         makeTaskRequest({ jtPageSize: numberTasks, filter: `__int__tipo=${type}` }).then(response => {
-            let messageTasks = helpers.buildResponseTasks(response.data.d.Records, [
+            let data = response.data.d.Records;
+
+            if (!data.length) {
+                bot.reply(message, ":mega: Não há resultados!");
+                return;
+            }
+
+            let messageTasks = helpers.buildResponseTasks(data, [
                 'Id', 'Reference', 'Description', 'Status'
             ]);
 
@@ -37,10 +44,17 @@ module.exports = {
     GET_TASKS: (bot, message) => {
         let numberTasks = parseInt(message.match[1]);
 
-        bot.reply(message, `Obtendo *${numberTasks}* tarefas...`);
+        bot.reply(message, `:gear: Obtendo *${numberTasks}* tarefas...`);
 
         makeTaskRequest({ jtPageSize: numberTasks }).then(response => {
-            let messageTasks = helpers.buildResponseTasks(response.data.d.Records, [
+            let data = response.data.d.Records;
+
+            if (!data.length) {
+                bot.reply(message, ":mega: Não há resultados!");
+                return;
+            }
+
+            let messageTasks = helpers.buildResponseTasks(data, [
                 'Id', 'Reference', 'Description', 'Status'
             ]);
 
