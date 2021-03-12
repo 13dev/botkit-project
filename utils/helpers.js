@@ -36,12 +36,13 @@ module.exports = {
     buildMessageTasks: function (response, params = []) {
         let result = "```\n";
         response.forEach(task => {
+            result += `──────────────────────────── \n`;
             params.forEach(param => {
                 if(task[param] !== undefined) {
                     result += `${param}: ${task[param]} \n`;
                 }
             });
-            result += `-------------------------------------------- \n`;
+            result += `──────────────────────────── \n\n`;
         })
 
         return result + "```";

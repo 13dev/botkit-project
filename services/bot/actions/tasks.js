@@ -19,9 +19,11 @@ module.exports = {
             jtSorting: helpers.buildSorting('ID', 'int'),
             token: process.env.API_TOKEN
         }).then(response => {
-            response = response.data.d.Records;
-            console.log(response)
-            bot.reply(message, helpers.buildMessageTasks(response, ['Id', 'Reference', 'Defscription', 'Status']));
+            let messageTasks = helpers.buildMessageTasks(response.data.d.Records, [
+                'Id', 'Reference', 'Description', 'Status'
+            ]);
+
+            bot.reply(message, messageTasks);
         }).catch(console.log);
     },
 
@@ -40,9 +42,11 @@ module.exports = {
             jtSorting: helpers.buildSorting('ID', 'int'),
             token: process.env.API_TOKEN
         }).then(response => {
-            response = response.data.d.Records;
-            console.log(response)
-            bot.reply(message, helpers.buildMessageTasks(response, ['Id', 'Reference', 'Description', 'Status']));
+            let messageTasks = helpers.buildMessageTasks(response.data.d.Records, [
+                'Id', 'Reference', 'Description', 'Status'
+            ]);
+
+            bot.reply(message, messageTasks);
         }).catch(console.log);
     }
 }
