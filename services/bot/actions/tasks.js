@@ -2,7 +2,7 @@ const helpers = require('../../../utils/helpers');
 const axios = require('axios');
 
 
-let makeTaskRequest = (params = {})  => {
+let makeTaskRequest = (params = {}) => {
     return axios.post('/RequestFilteredList', {
         filter: "1=1",
         code: "",
@@ -18,13 +18,19 @@ module.exports = {
 
     //get my first 5 tasks of type 16
     GET_TASKS_BY_TYPE: (bot, message) => {
-        let numberTasks = parseInt(message.match[1]);
-        let type = parseInt(message.match[2]);
+        let numberTasks = 5;
+        let type = parseInt(message.match[1]);
+
+        if (message.match.length < 2) {
+            numberTasks = parseInt(message.match[1]);
+            type = parseInt(message.match[2]);
+        }
+
 
         bot.reply(message, `:gear: Obtendo *${numberTasks}* tarefas do tipo *${type}*...`);
 
 
-        makeTaskRequest({ jtPageSize: numberTasks, filter: `__int__tipo=${type}` }).then(response => {
+        makeTaskRequest({jtPageSize: numberTasks, filter: `__int__tipo=${type}`}).then(response => {
             let data = response.data.d.Records;
 
             if (!data.length) {
@@ -46,7 +52,7 @@ module.exports = {
 
         bot.reply(message, `:gear: Obtendo *${numberTasks}* tarefas...`);
 
-        makeTaskRequest({ jtPageSize: numberTasks }).then(response => {
+        makeTaskRequest({jtPageSize: numberTasks}).then(response => {
             let data = response.data.d.Records;
 
             if (!data.length) {
@@ -68,7 +74,7 @@ module.exports = {
         bot.reply(message, `:gear: Obtendo tarefas com prioridade...`);
 
 
-        makeTaskRequest({  filter: `__int__prioridade=1` }).then(response => {
+        makeTaskRequest({filter: `__int__prioridade=1`}).then(response => {
             let data = response.data.d.Records;
 
             if (!data.length) {
