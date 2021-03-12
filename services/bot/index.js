@@ -11,9 +11,10 @@ controller.middleware.receive.use((bot, message, next) => {
     next();
 });
 
-
 for (const [keyword, handler] of Object.entries(controllers)) {
-    controller.hears(keywords[keyword], scopes, handler);
+    if(keywords[keyword] !== undefined) {
+        controller.hears(keywords[keyword], scopes, handler);
+    }
 }
 
 module.exports = controller;
