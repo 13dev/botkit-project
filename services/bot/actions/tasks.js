@@ -1,5 +1,6 @@
 const helpers = require('../../../utils/helpers');
 const consumer = require('../../consumer');
+const axios = require('axios');
 
 module.exports = {
     GET_TASKS: (bot, message) => {
@@ -7,30 +8,30 @@ module.exports = {
 
         console.log("Num of tasks:", numberTasks);
 
-        let data = consumer.requestFilterList({
+        bot.reply(message, `Obtendo ${numberTasks} tarefas...`);
+
+        axios.post('/RequestFilteredList', {
             filter: "1=1",
             code: "",
             jtStartIndex: 0,
             jtPageSize: numberTasks,
             jtSorting: helpers.buildSorting('ID', 'int'),
             token: process.env.API_TOKEN
-        });
+        }).then(response => {
+            response = response.data.d.Records;
 
-        bot.reply(message, `Obtendo ${numberTasks} tarefas...`);
+            let result = "```";
+            response.forEach(function (value) {
+                result += `ID: ${value.Id} \n`;
+                result += `Reference: ${value.Reference} \n`;
+                result += `Description: ${value.Description} \n`;
+                result += `Scope: ${value.Scope} \n`;
+                result += `Email: ${value.Email} \n`;
+                result += `Report Date: ${value.ReportDate} - Finish Date: ${value.FinishDate} \n`;
+                result += `-------------------------------------------- \n\n`;
+            })
 
-        console.log(data);
-
-        axios.post('/RequestFilteredList', data)
-            .then(response => {
-                response.data.d.Records.forEach(function (value) {
-                    bot.reply(message, "``` " +
-                        "ID: " + value.Id +
-                        "Reference: " + value.Reference +
-                        "Description: " + value.Description +
-                        "```");
-                })
-            }).catch(console.log);
-
-        bot.reply(message, `Obtendo ${numberTasks} tarefas...`);
+            bot.reply(message, result + "```");
+        }).catch(console.log);
     }
 };
