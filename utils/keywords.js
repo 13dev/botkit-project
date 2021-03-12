@@ -6,4 +6,5 @@ module.exports = {
     GREETINGS: ['ola', 'boas'],
     GET_TASKS: ['get my first (.*) tasks'],
     GET_TASKS_BY_TYPE: ['get my first (.*) tasks of type (.*)'],
+    GET_PRIORITY_TASKS: ['get my top priority tasks'],
 };

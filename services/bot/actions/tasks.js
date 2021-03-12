@@ -60,6 +60,28 @@ module.exports = {
 
             bot.reply(message, messageTasks);
         }).catch(console.log);
+    },
+
+    // get my top priority tasks
+    GET_PRIORITY_TASKS: (bot, message) => {
+
+        bot.reply(message, `:gear: Obtendo tarefas com prioridade...`);
+
+
+        makeTaskRequest({  filter: `__int__prioridade=1` }).then(response => {
+            let data = response.data.d.Records;
+
+            if (!data.length) {
+                bot.reply(message, ":mega: Não há resultados!");
+                return;
+            }
+
+            let messageTasks = helpers.buildResponseTasks(data, [
+                'Id', 'Reference', 'Description', 'Status'
+            ]);
+
+            bot.reply(message, messageTasks);
+        }).catch(console.log);
     }
 }
 
