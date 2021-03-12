@@ -24,7 +24,7 @@ module.exports = {
         bot.reply(message, `Obtendo *${numberTasks}* tarefas do tipo *${type}*...`);
 
 
-        makeTaskRequest({ jtPageSize: numberTasks }).then(response => {
+        makeTaskRequest({ jtPageSize: numberTasks, filter: `__int__tipo=${type}` }).then(response => {
             let messageTasks = helpers.buildResponseTasks(response.data.d.Records, [
                 'Id', 'Reference', 'Description', 'Status'
             ]);
@@ -39,7 +39,7 @@ module.exports = {
 
         bot.reply(message, `Obtendo *${numberTasks}* tarefas...`);
 
-        makeTaskRequest({ filter: "__int__tipo=24", jtPageSize: numberTasks }).then(response => {
+        makeTaskRequest({ jtPageSize: numberTasks }).then(response => {
             let messageTasks = helpers.buildResponseTasks(response.data.d.Records, [
                 'Id', 'Reference', 'Description', 'Status'
             ]);

@@ -43,7 +43,7 @@ module.exports = {
                         .toString()
                         .replace(/\r?\n|\r/g, "\n> ");
 
-                    result += `> *${param.toString().toUpperCase()}:* ${value} \n`;
+                    result += `> *${param.toString().toUpperCase()}:* ${value}\n`;
                 }
             });
             result += `\n`;
