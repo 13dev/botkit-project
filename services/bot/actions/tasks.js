@@ -1,5 +1,4 @@
 const helpers = require('../../../utils/helpers');
-const consumer = require('../../consumer');
 const axios = require('axios');
 
 
@@ -22,7 +21,7 @@ module.exports = {
         let numberTasks = parseInt(message.match[1]);
         let type = parseInt(message.match[2]);
 
-        bot.reply(message, `Obtendo ${numberTasks} tarefas of type ${type}`);
+        bot.reply(message, `Obtendo *${numberTasks}* tarefas do tipo *${type}*...`);
 
 
         makeTaskRequest({ jtPageSize: numberTasks }).then(response => {
@@ -38,9 +37,7 @@ module.exports = {
     GET_TASKS: (bot, message) => {
         let numberTasks = parseInt(message.match[1]);
 
-        console.log("Num of tasks:", numberTasks);
-
-        bot.reply(message, `Obtendo ${numberTasks} tarefas...`);
+        bot.reply(message, `Obtendo *${numberTasks}* tarefas...`);
 
         makeTaskRequest({ filter: "__int__tipo=24", jtPageSize: numberTasks }).then(response => {
             let messageTasks = helpers.buildResponseTasks(response.data.d.Records, [
