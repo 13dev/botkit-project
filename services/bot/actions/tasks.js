@@ -19,7 +19,7 @@ module.exports = {
             jtSorting: helpers.buildSorting('ID', 'int'),
             token: process.env.API_TOKEN
         }).then(response => {
-            let messageTasks = helpers.buildMessageTasks(response.data.d.Records, [
+            let messageTasks = helpers.buildResponseTasks(response.data.d.Records, [
                 'Id', 'Reference', 'Description', 'Status'
             ]);
 
@@ -42,7 +42,7 @@ module.exports = {
             jtSorting: helpers.buildSorting('ID', 'int'),
             token: process.env.API_TOKEN
         }).then(response => {
-            let messageTasks = helpers.buildMessageTasks(response.data.d.Records, [
+            let messageTasks = helpers.buildResponseTasks(response.data.d.Records, [
                 'Id', 'Reference', 'Description', 'Status'
             ]);
 

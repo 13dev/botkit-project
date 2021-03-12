@@ -33,7 +33,7 @@ module.exports = {
         return `__${type.toLowerCase()}__${key} ${order.toUpperCase()}`
     },
 
-    buildMessageTasks: function (response, params = []) {
+    buildResponseTasks: function (response, params = []) {
         let result = "```\n";
         response.forEach(task => {
             result += `──────────────────────────── \n`;
