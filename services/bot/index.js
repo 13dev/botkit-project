@@ -3,6 +3,7 @@ const keywords = require('../../utils/keywords');
 const helpers = require('../../utils/helpers');
 const controllers = require('./actions');
 const controller = require('./instance');
+const async = require("async");
 
 controller.middleware.receive.use((bot, message, next) => {
     if (message.text !== undefined && message.type === 'direct_message') {

@@ -17,7 +17,7 @@ let makeTaskRequest = (params = {}) => {
 module.exports = {
 
     //get my first 5 tasks of type 16
-    GET_TASKS_BY_TYPE: (bot, message) => {
+    GET_TASKS_BY_TYPE: async (bot, message) => {
         let numberTasks = 5;
         let type = parseInt(message.match[1]);
 
@@ -47,7 +47,7 @@ module.exports = {
 
     },
 
-    GET_TASKS: (bot, message) => {
+    GET_TASKS: async (bot, message) => {
         let numberTasks = parseInt(message.match[1]);
 
         bot.reply(message, `:gear: Obtendo *${numberTasks}* tarefas...`);
@@ -69,7 +69,7 @@ module.exports = {
     },
 
     // get my top priority tasks
-    GET_PRIORITY_TASKS: (bot, message) => {
+    GET_PRIORITY_TASKS: async (bot, message) => {
 
         bot.reply(message, `:gear: Obtendo tarefas com prioridade...`);
 

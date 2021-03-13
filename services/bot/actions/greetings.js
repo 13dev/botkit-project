@@ -3,7 +3,7 @@ const {formatUptime} = require('../../../utils/helpers');
 
 module.exports = {
 
-    GREETINGS: (bot, message) => {
+    GREETINGS: async (bot, message) => {
         const options = {
             timestamp: message.ts,
             channel: message.channel,
@@ -26,7 +26,7 @@ module.exports = {
             bot.reply(message, 'Olá.');
         });
     },
-    SHUTDOWN: (bot, message) => {
+    SHUTDOWN: async (bot, message) => {
 
         bot.startConversation(message, (err, convo) => {
 
@@ -53,7 +53,7 @@ module.exports = {
         });
     },
 
-    IDENTIFY_ME: (bot, message) => {
+    IDENTIFY_ME: async (bot, message) => {
         const hostname = os.hostname();
         const uptime = formatUptime(process.uptime());
 

@@ -1,6 +1,6 @@
 module.exports = {
 
-    SET_USER_NAME:  (bot, message) => {
+    SET_USER_NAME: async (bot, message) => {
         const name = message.match[1];
 
         controller.storage.users.get(message.user, (err, user) => {
@@ -18,7 +18,7 @@ module.exports = {
         });
     },
 
-    WHATS_USER_NAME: (bot, message) => {
+    WHATS_USER_NAME: async (bot, message) => {
 
         controller.storage.users.get(message.user, (err, user) => {
             if (user && user.name) {
