@@ -1,6 +1,6 @@
 const axios = require('axios');
 const {Botkit} = require('botkit');
-const {WebAdapter} = require('botbuilder-adapter-web');
+const {WebAdapter} = require('botbuilder-adapter-web')
 
 require('dotenv').config();
 
@@ -12,9 +12,17 @@ if (!process.env.API_TOKEN) {
     process.exit(1);
 }
 
+
+// let adapter = new SlackAdapter({
+//     clientSigningSecret: process.env.SLACK_SIGINING_SECRET,
+//     botToken: process.env.SLACK_BOT_TOKEN,
+//
+// });
+
 let controller = new Botkit({
     adapter: new WebAdapter(),
 });
+
 
 
 //require('./services/bot');
