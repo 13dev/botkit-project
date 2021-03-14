@@ -13,16 +13,21 @@
 // }).startRTM();
 
 
-const { Botkit } = require('botkit');
-const { SlackAdapter } = require('botbuilder-adapter-slack');
+const {Botkit} = require('botkit');
+const {SlackAdapter} = require('botbuilder-adapter-slack');
 
 let adapter = new SlackAdapter({
-    botToken: process.env.TOKEN,
+    clientSigningSecret: process.env.SLACK_SIGINING_SECRET,
+    botToken: process.env.SLACK_BOT_TOKEN,
+
 });
 
 let controller = new Botkit({
-    adapter: adapter,
+    adapter,
 });
 
+controller.on('message', async(bot, message) => {
+    await bot.reply(message, 'I heard a message!');
+});
 
 module.exports = controller;

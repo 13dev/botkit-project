@@ -1,16 +1,23 @@
 const axios = require('axios');
+const {Botkit} = require('botkit');
+const {WebAdapter} = require('botbuilder-adapter-web');
 
 require('dotenv').config();
 
 axios.defaults.baseURL = process.env.API_URL;
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
-if (!process.env.TOKEN) {
+if (!process.env.API_TOKEN) {
     console.log('Missing token in environment.');
     process.exit(1);
 }
 
-require('./services/bot');
+let controller = new Botkit({
+    adapter: new WebAdapter(),
+});
+
+
+//require('./services/bot');
 
 
 //
