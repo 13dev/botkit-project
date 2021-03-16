@@ -4,27 +4,17 @@ const scopes = require("../utils/scopes");
 module.exports = function (controller) {
 
     controller.hears(keywords.GREETINGS, scopes, async (bot, message) => {
-        const options = {
-            timestamp: message.ts,
-            channel: message.channel,
-            name: 'robot_face',
-        };
 
-        // react to sended message
-        bot.api.reactions.add(options, err => {
-            if (err) {
-                bot.botkit.log('Impossivel adicionar uma reacção.', err);
-            }
-        });
-
-        controller.storage.users.get(message.user, (err, user) => {
-            if (user && user.name) {
-                bot.reply(message, `Olá ${user.name}!`);
-                return;
-            }
-
-            bot.reply(message, 'Olá.');
-        });
+        await bot.reply(message, 'Olá.');
+        //
+        // await controller.storage.getItem(message.user, async (err, user) => {
+        //     if (user && user.name) {
+        //
+        //         return;
+        //     }
+        //
+        //
+        // });
     });
     controller.hears(keywords.SHUTDOWN, scopes, async (bot, message) => {
 
@@ -57,6 +47,6 @@ module.exports = function (controller) {
         const hostname = os.hostname();
         const uptime = formatUptime(process.uptime());
 
-        bot.reply(message, `:robot_face: Sou um bot chamado <@${bot.identity.name}>. Estou ativo por ${uptime} em ${hostname}.`);
+        bot.reply(message, `:robot_face: Sou um bot, Estou ativo por ${uptime} em ${hostname}.`);
     });
 }

@@ -76,4 +76,25 @@ module.exports = function (controller) {
         }).catch(console.log);
     })
 
+    controller.hears(keywords.GET_TASKS, scopes, async (bot, message) => {
+        let numberTasks = parseInt(message.matches[1]);
+
+        await bot.reply(message, `Obtendo *${numberTasks}* tarefas...`);
+
+        await makeTaskRequest({jtPageSize: numberTasks}).then(response => {
+            let data = response.data.d.Records;
+
+            if (!data.length) {
+                bot.reply(message, "Não há resultados!");
+                return;
+            }
+
+            let messageTasks = helpers.buildResponseTasks(data, [
+                'Id', 'Reference', 'Description', 'Status'
+            ]);
+
+            bot.reply(message, messageTasks);
+        }).catch(console.log);
+    });
+
 }
