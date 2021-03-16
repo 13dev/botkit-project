@@ -36,17 +36,13 @@ module.exports = {
     buildResponseTasks: function (response, params = []) {
         let result = "";
         response.forEach(task => {
-            result += `\n`;
             params.forEach(param => {
                 if(task[param]) {
-                    let value = task[param]
-                        .toString()
-                        .replace(/\r?\n|\r/g, "\n> ");
 
-                    result += `> *${param.toString().toUpperCase()}:* ${value}\n`;
+                    result += `<b>${param.toString().toUpperCase()}:</b> ${task[param]} <br/>`;
                 }
             });
-            result += `\n`;
+            result += `<hr>`;
         })
 
         return result;

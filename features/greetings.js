@@ -1,9 +1,9 @@
-const controller = require('../instance');
-const {formatUptime} = require('../../../utils/helpers');
+const keywords = require("../utils/keywords");
+const scopes = require("../utils/scopes");
 
-module.exports = {
+module.exports = function (controller) {
 
-    GREETINGS: async (bot, message) => {
+    controller.hears(keywords.GREETINGS, scopes, async (bot, message) => {
         const options = {
             timestamp: message.ts,
             channel: message.channel,
@@ -25,8 +25,8 @@ module.exports = {
 
             bot.reply(message, 'Olá.');
         });
-    },
-    SHUTDOWN: async (bot, message) => {
+    });
+    controller.hears(keywords.SHUTDOWN, scopes, async (bot, message) => {
 
         bot.startConversation(message, (err, convo) => {
 
@@ -51,12 +51,12 @@ module.exports = {
                 }
             ]);
         });
-    },
+    });
 
-    IDENTIFY_ME: async (bot, message) => {
+    controller.hears(keywords.IDENTIFY_ME, scopes, async (bot, message) => {
         const hostname = os.hostname();
         const uptime = formatUptime(process.uptime());
 
         bot.reply(message, `:robot_face: Sou um bot chamado <@${bot.identity.name}>. Estou ativo por ${uptime} em ${hostname}.`);
-    },
-};
+    });
+}

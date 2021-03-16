@@ -1,20 +1,15 @@
 {
-  "name": "botkit-project",
+  "name": "botkit-botkit-test",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "bot.js",
   "scripts": {
+    "start": "node bot.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "axios": "^0.21.1",
-    "botbuilder-adapter-slack": "^1.0",
     "botbuilder-adapter-web": "^1.0.9",
     "botkit": "^4.10.0",
-    "dotenv": "^8.2.0",
-    "restify": "^8.5.1"
+    "dotenv": "^7.0.0"
   }
 }
