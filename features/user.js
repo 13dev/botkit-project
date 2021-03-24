@@ -1,7 +1,9 @@
-module.exports = {
+const keywords = require("../utils/keywords");
+const scopes = require("../utils/scopes");
 
-    SET_USER_NAME: async (bot, message) => {
-        const name = message.match[1];
+module.exports = function (controller) {
+    controller.hears(keywords.SET_USER_NAME, scopes, async (bot, message) => {
+        const name = message.matches[1];
 
         controller.storage.users.get(message.user, (err, user) => {
             if (!user) {
@@ -16,9 +18,9 @@ module.exports = {
                 bot.reply(message, `Percebi. Vou chamá-lo de ${user.name} a partir de agora.`);
             });
         });
-    },
+    });
 
-    WHATS_USER_NAME: async (bot, message) => {
+    controller.hears(keywords.WHATS_USER_NAME, scopes, async (bot, message) => {
 
         controller.storage.users.get(message.user, (err, user) => {
             if (user && user.name) {
@@ -88,5 +90,5 @@ module.exports = {
             });
 
         });
-    }
-};
+    });
+}
